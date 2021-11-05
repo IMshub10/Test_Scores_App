@@ -37,7 +37,6 @@ class ViewTestDetailsFragment : Fragment() {
         fun newInstance() = ViewTestDetailsFragment()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -107,6 +106,7 @@ class ViewTestDetailsFragment : Fragment() {
         })
     }
 
+    //Switch to AddTestDetailsFragment
     private fun addTestFragment(
         update: Boolean,
         id: String?,

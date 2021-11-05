@@ -34,9 +34,6 @@ class AddTestDetailsFragment : Fragment() {
     private val TAG = "AddTestDetailsFragment"
     private lateinit var binding: AddScoresFragmentBinding
     private lateinit var addTestViewModel: AddTestViewModel
-    private var testSeriesList = listOf<String>()
-    private var updateTestScore: Boolean = false
-    private lateinit var testScoreId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,41 +51,33 @@ class AddTestDetailsFragment : Fragment() {
         )
         initViewModel()
         ifUpdateInitViewData()
-        if (!updateTestScore) {
-            fillTestSeries()
-        } else {
+        if (addTestViewModel.updateTestScore) {
             binding.atvSelectTestSeries.isEnabled = false
             binding.pgAddScores.isVisible = false
             requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
         listeners()
+        observers()
     }
 
-    private fun fillTestSeries() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val testSeriesResponse = addTestViewModel.getTestSeries()
-                if (testSeriesResponse != null && !testSeriesResponse.error) {
-                    testSeriesList = testSeriesResponse.testSeries
-                    withContext(Dispatchers.Main) {
-                        val arrayAdapter =
-                            ArrayAdapter(requireContext(), R.layout.item_dropdown, testSeriesList)
-                        binding.atvSelectTestSeries.setAdapter(arrayAdapter)
-                        binding.pgAddScores.isVisible = false
-                        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Util.showShortToast(
+    private fun observers() {
+        addTestViewModel.fillTestSeriesStatus.observe(viewLifecycleOwner, {
+            if (it) {
+                val arrayAdapter =
+                    ArrayAdapter(
                         requireContext(),
-                        "Internet is not available"
+                        R.layout.item_dropdown,
+                        addTestViewModel.testSeriesList
                     )
-                }
+                binding.atvSelectTestSeries.setAdapter(arrayAdapter)
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.pgAddScores.isVisible = false
+            } else {
+                binding.pgAddScores.isVisible = true
             }
-
-        }
+        })
     }
+
 
     private fun openDatePicker() {
         val listener = object : DatePickerDialog.OnDatePickerDateSelected {
@@ -143,7 +132,7 @@ class AddTestDetailsFragment : Fragment() {
         binding.mbSaveTestScore.setOnClickListener {
             binding.pgAddScores.isVisible = true
             CoroutineScope(Dispatchers.IO).launch {
-                if (!updateTestScore) {
+                if (!addTestViewModel.updateTestScore) {
                     createTestScore()
                 } else {
                     updateTestScore()
@@ -167,7 +156,7 @@ class AddTestDetailsFragment : Fragment() {
             try {
                 val updateResponse =
                     addTestViewModel.updateTestScore(
-                        testScoreId,
+                        addTestViewModel.testScoreId,
                         UpdateTestScore(getTestSubjectScores())
                     )
                 createOrUpdateSuccess(updateResponse)
@@ -287,13 +276,14 @@ class AddTestDetailsFragment : Fragment() {
 
     private fun initViewModel() {
         addTestViewModel = ViewModelProvider(requireActivity())[AddTestViewModel::class.java]
+        addTestViewModel.setTestSeriesList(requireContext())
     }
 
     private fun ifUpdateInitViewData() {
         arguments?.let {
-            updateTestScore = it.getBoolean("update")
-            if (updateTestScore) {
-                testScoreId = it.getString("id")!!
+            addTestViewModel.updateTestScore = it.getBoolean("update")
+            if (addTestViewModel.updateTestScore) {
+                addTestViewModel.testScoreId = it.getString("id")!!
                 binding.atvSelectTestSeries.setText(it.getString("testSeries")!!)
                 binding.etTestName.setText(it.getString("testName")!!)
                 binding.etTakenOn.setText(it.getString("takenOn")!!)
