@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.summer.math_and_go_assignment.R
-import com.summer.math_and_go_assignment.data.api.model.DisplayItem
+import com.summer.math_and_go_assignment.data.externalmodels.DisplayItem
 import com.summer.math_and_go_assignment.data.api.model.TestScore
 import com.summer.math_and_go_assignment.databinding.ItemTestScoreBinding
 import com.summer.math_and_go_assignment.utils.Constants
@@ -28,26 +29,8 @@ class TestScoresAdapter(private val context: Context) :
         this.setOnMenuItemClick = setOnMenuItemClick
     }
 
-    inner class TestScoreHolder(private val binding: ItemTestScoreBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(testScore: TestScore) {
-            //date conversion
-            val displayItem = displayDetails(testScore, layoutPosition)
-            //bind details
-            binding.apply {
-                tvTestName.text = displayItem.testName
-                tvDate.text = displayItem.testDate
-                tvTestSeries.text = displayItem.testSeries
-                tvPhysicsScore.text = displayItem.physicsScore
-                tvChemistryScore.text = displayItem.chemistryScore
-                tvMathScore.text = displayItem.mathScore
-                tvTotalScore.text = displayItem.totalScore
-            }
-            binding.ivMenuUpdateDelete.setOnClickListener {
-                popupMenus(it, testScore)
-            }
-        }
-    }
+    inner class TestScoreHolder(val binding: ItemTestScoreBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     private fun displayDetails(testScore: TestScore, position: Int): DisplayItem {
         //scores text
@@ -120,14 +103,18 @@ class TestScoresAdapter(private val context: Context) :
     }
 
     override fun onBindViewHolder(holder: TestScoreHolder, position: Int) {
-        holder.bind(testScore = getItem(position)!!)
+        holder.binding.testScore = displayDetails(getItem(position)!!, position)
+        holder.binding.ivMenuUpdateDelete.setOnClickListener {
+            popupMenus(it, getItem(position)!!)
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestScoreHolder {
-        return TestScoreHolder(
-            ItemTestScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestScoreHolder =
+        TestScoreHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context), R.layout.item_test_score, parent, false
+            )
         )
-    }
 
     private fun popupMenus(view: View, testScore: TestScore) {
         val popupMenus = PopupMenu(context, view)

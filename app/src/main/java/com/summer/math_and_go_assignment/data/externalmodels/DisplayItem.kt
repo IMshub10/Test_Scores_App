@@ -1,4 +1,4 @@
-package com.summer.math_and_go_assignment.data.api.model
+package com.summer.math_and_go_assignment.data.externalmodels
 
 data class DisplayItem(
     val testName: String,
