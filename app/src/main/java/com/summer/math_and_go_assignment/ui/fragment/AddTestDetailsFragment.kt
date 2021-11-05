@@ -20,6 +20,7 @@ import com.summer.math_and_go_assignment.databinding.AddScoresFragmentBinding
 import com.summer.math_and_go_assignment.ui.dialog.DatePickerDialog
 import com.summer.math_and_go_assignment.utils.Constants
 import com.summer.math_and_go_assignment.utils.Util
+import com.summer.math_and_go_assignment.viewmodel.AddTestViewModel
 import com.summer.math_and_go_assignment.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +34,7 @@ class AddTestDetailsFragment : Fragment() {
 
     private val TAG = "AddTestDetailsFragment"
     private lateinit var binding: AddScoresFragmentBinding
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var addTestViewModel: AddTestViewModel
     private var testSeriesList = listOf<String>()
     private var updateTestScore: Boolean = false
     private lateinit var testScoreId: String
@@ -67,7 +68,7 @@ class AddTestDetailsFragment : Fragment() {
     private fun fillTestSeries() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val testSeriesResponse = mainViewModel.getTestSeries()
+                val testSeriesResponse = addTestViewModel.getTestSeries()
                 if (testSeriesResponse != null && !testSeriesResponse.error) {
                     testSeriesList = testSeriesResponse.testSeries
                     withContext(Dispatchers.Main) {
@@ -166,7 +167,7 @@ class AddTestDetailsFragment : Fragment() {
         if (atLeastOneSubjectSelected && validateScores()) {
             try {
                 val updateResponse =
-                    mainViewModel.updateTestScore(
+                    addTestViewModel.updateTestScore(
                         testScoreId,
                         UpdateTestScore(getTestSubjectScores())
                     )
@@ -187,7 +188,7 @@ class AddTestDetailsFragment : Fragment() {
     private suspend fun createTestScore() {
         if (validateTestDetail()) {
             val createTestScoreResponse =
-                mainViewModel.createTestScore(getTestDetail())
+                addTestViewModel.createTestScore(getTestDetail())
             createOrUpdateSuccess(createTestScoreResponse)
         } else {
             withContext(Dispatchers.Main) {
@@ -286,7 +287,7 @@ class AddTestDetailsFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        addTestViewModel = ViewModelProvider(requireActivity())[AddTestViewModel::class.java]
     }
 
     private fun ifUpdateInitViewData() {
