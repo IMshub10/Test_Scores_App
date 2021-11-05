@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/exit_frag"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_x"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_add_test_score"
+            style="@style/text_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/label_add_test_score"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_add_test_score_subtitle"
+            style="@style/text_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:alpha=".75"
+            android:text="@string/label_add_nta_abhyas_or_other_test_scores"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_add_test_score"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_add_test_score" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_test_series"
+            style="@style/text_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha=".75"
+            android:text="@string/test_series"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_add_test_score_subtitle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_add_test_score_subtitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spn_test_series"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_test_series">
+
+            <AutoCompleteTextView
+                android:id="@+id/atv_select_test_series"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusableInTouchMode="false"
+                android:inputType="none"
+                android:text="@string/select_text_series" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_test_name"
+            style="@style/text_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:alpha=".75"
+            android:text="@string/test_name"
+            app:layout_constraintStart_toStartOf="@+id/spn_test_series"
+            app:layout_constraintTop_toBottomOf="@+id/spn_test_series" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_test_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:hint="@string/label_enter_test_name"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_test_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_taken_on"
+            style="@style/text_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:alpha=".75"
+            android:text="@string/label_taken_on"
+            app:layout_constraintStart_toStartOf="@+id/spn_test_series"
+            app:layout_constraintTop_toBottomOf="@+id/et_test_name" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_taken_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:focusable="false"
+            android:hint="@string/mm_dd_yyyy"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_taken_on" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_subject"
+            style="@style/text_caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:alpha=".75"
+            android:text="@string/subject"
+            app:layout_constraintEnd_toStartOf="@+id/tv_label_your_score"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_taken_on" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_your_score"
+            style="@style/text_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:alpha=".75"
+            android:text="@string/label_your_score"
+            app:layout_constraintEnd_toStartOf="@+id/tv_label_full_score"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_label_subject"
+            app:layout_constraintTop_toBottomOf="@+id/et_taken_on" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label_full_score"
+            style="@style/text_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:alpha=".75"
+            android:text="@string/label_full_score"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_label_your_score"
+            app:layout_constraintTop_toBottomOf="@+id/et_taken_on" />
+
+        <!--    Physics-->
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_Physics"
+            style="@style/text_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha=".33"
+            android:buttonTint="@color/blue_light"
+            android:text="@string/label_physics"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@id/et_physics_your_score"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_subject"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_subject" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_physics_your_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:enabled="false"
+            android:hint="@string/sample_00"
+            android:inputType="number"
+            android:maxLength="2"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_label_your_score"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_your_score"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_your_score" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_physics_full_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:enabled="false"
+            android:hint="@string/_100"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="@string/_100"
+            app:layout_constraintEnd_toEndOf="@+id/tv_label_full_score"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_full_score"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_full_score" />
+
+        <!--    Chemistry-->
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_chemistry"
+            style="@style/text_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha=".33"
+            android:buttonTint="@color/blue_light"
+            android:text="@string/chemistry"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@id/et_chemistry_your_score"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_subject"
+            app:layout_constraintTop_toBottomOf="@+id/cb_Physics" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_chemistry_your_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:enabled="false"
+            android:hint="@string/sample_00"
+            android:inputType="number"
+            android:maxLength="2"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/et_physics_your_score"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/et_physics_your_score"
+            app:layout_constraintTop_toBottomOf="@+id/et_physics_your_score" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_chemistry_full_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:enabled="false"
+            android:hint="@string/_100"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="@string/_100"
+            app:layout_constraintEnd_toEndOf="@+id/et_physics_full_score"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/et_physics_full_score"
+            app:layout_constraintTop_toBottomOf="@+id/et_physics_full_score" />
+
+        <!--Maths-->
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_math"
+            style="@style/text_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha=".33"
+            android:buttonTint="@color/blue_light"
+            android:text="@string/label_math"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/et_math_your_score"
+            app:layout_constraintStart_toStartOf="@+id/tv_label_subject"
+            app:layout_constraintTop_toBottomOf="@+id/cb_chemistry" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_math_your_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:enabled="false"
+            android:hint="@string/sample_00"
+            android:inputType="number"
+            android:maxLength="2"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/et_chemistry_your_score"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/et_chemistry_your_score"
+            app:layout_constraintTop_toBottomOf="@+id/et_chemistry_your_score" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_math_full_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rr_12_border"
+            android:enabled="false"
+            android:hint="@string/_100"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="@string/_100"
+            app:layout_constraintEnd_toEndOf="@+id/et_chemistry_full_score"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/et_chemistry_full_score"
+            app:layout_constraintTop_toBottomOf="@+id/et_chemistry_full_score" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_save_test_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="@color/blue_light"
+            android:text="@string/label_save"
+            android:textColor="@color/white"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cb_math" />
+
+        <!--Progress bar for loading test series -->
+        <ProgressBar
+            android:id="@+id/pg_add_scores"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminateTint="@color/blue_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

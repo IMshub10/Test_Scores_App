@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_items"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_rr_12"
+    android:backgroundTint="?attr/colorSurface"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_edit_score"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_edit"
+        android:drawablePadding="8dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/label_edit_score" />
+
+    <View style="@style/Separator" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_delete"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_delete"
+        android:drawablePadding="8dp"
+        android:drawableTint="?colorError"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/label_delete"
+        android:textColor="?attr/colorError" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

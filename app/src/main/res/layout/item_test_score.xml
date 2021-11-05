@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itm_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/shape_rr_12"
+    android:backgroundTint="?attr/colorSurface"
+    android:paddingBottom="16dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_test_name"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/sample_test_series_9"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_date"
+        style="@style/text_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:drawableStart="@drawable/ic_calendar_lite"
+        android:drawablePadding="8dp"
+        android:text="@string/_2021_jan_12"
+        app:layout_constraintEnd_toStartOf="@+id/appCompatImageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_options"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_label_test_series"
+        style="@style/text_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_test_series"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_test_name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_test_series"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/other_series"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_test_series"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_test_series" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_label_physics"
+        style="@style/text_caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:drawableStart="@drawable/ic_physics"
+        android:drawablePadding="8dp"
+        android:gravity=""
+        android:text="@string/label_physics"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_chemistry"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_test_series" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_label_chemistry"
+        style="@style/text_caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_chemistry"
+        android:drawablePadding="8dp"
+        android:text="@string/label_chemistry"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_math"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_physics"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_physics" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_label_math"
+        style="@style/text_caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_maths"
+        android:drawablePadding="8dp"
+        android:text="@string/label_math"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_total"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_chemistry"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_physics" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_label_total"
+        style="@style/text_caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/label_total"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_math"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_physics" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_physics_score"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_score"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_physics"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_physics" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_chemistry_score"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_score"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_physics"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_chemistry"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_chemistry" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_math_score"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_score"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_chemistry"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_math"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_math" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_total_score"
+        style="@style/text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_score"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_label_math"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_total"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_total" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

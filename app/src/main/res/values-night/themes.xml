@@ -1,0 +1,73 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Math_And_Go_Assignment" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/black_hole</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSurface">@color/black</item>
+        <item name="colorOnSurface">@color/black_hole</item>
+
+        <item name="colorError">@color/red_dark</item>
+        <item name="colorAccent">@color/white</item>
+
+        <item name="android:colorBackground">@color/black_hole</item>
+        <item name="android:windowBackground">@color/black_hole</item>
+        <item name="colorBackgroundFloating">@color/translucent_0.3</item>
+
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="statusBarForeground">?attr/colorOnPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:colorEdgeEffect">@color/transparent</item>
+
+        <item name="android:textColorLink">@color/blue_dark</item>
+        <item name="colorHint">@color/grey_dark</item>>
+
+        <item name="label">@color/white</item>
+        <item name="labelSecondary">@color/translucent_0.6</item>
+        <item name="labelTertiary">@color/translucent_0.3</item>
+        <item name="colorGreen">@color/green_dark</item>
+
+        <item name="colorSeparator">@color/separator_dark</item>
+        <item name="iconColorPrimary">@color/blue_dark</item>
+        <item name="iconColorSecondary">?attr/colorOnSurface</item>
+
+    </style>
+
+    <!--Image View Style=============================================================================-->
+    <style name="ImageViewShape" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <!--Seperator====================================================================================-->
+    <style name="Separator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?attr/colorSeparator</item>
+    </style>
+
+    <!--Text Styles====================================================================================-->
+    <style name="text_header_bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:lineHeight" tools:targetApi="p">25.5sp</item>
+        <item name="android:letterSpacing">0.012</item>
+        <item name="android:textColor">?attr/label</item>
+    </style>
+
+    <style name="text_body" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight" tools:targetApi="p">22.5sp</item>
+        <item name="lineHeight">22.5sp</item>
+        <item name="android:letterSpacing">0.016</item>
+        <item name="android:textColor">?attr/label</item>
+    </style>
+
+    <style name="text_caption" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight" tools:targetApi="p">18sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">?attr/label</item>
+    </style>
+
+</resources>
