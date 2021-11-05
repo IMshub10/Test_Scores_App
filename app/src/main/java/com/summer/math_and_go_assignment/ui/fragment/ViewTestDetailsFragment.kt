@@ -13,10 +13,11 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.summer.math_and_go_assignment.R
-import com.summer.math_and_go_assignment.data.api.model.TestDetails
+import com.summer.math_and_go_assignment.data.api.model.TestScore
 import com.summer.math_and_go_assignment.data.local.LocalUserDataStorage
 import com.summer.math_and_go_assignment.databinding.MainFragmentBinding
 import com.summer.math_and_go_assignment.ui.adapter.TestScoresAdapter
+import com.summer.math_and_go_assignment.utils.Util
 import com.summer.math_and_go_assignment.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -63,15 +64,13 @@ class ViewTestDetailsFragment : Fragment() {
         listeners()
     }
 
+
     private fun listeners() {
         binding.mbAddTestDetail.setOnClickListener {
-            val transaction =
-                requireActivity().supportFragmentManager.beginTransaction()
-            transaction.addToBackStack(null)
-            transaction
-                .replace(R.id.container, AddTestDetailsFragment.newInstance()).commit()
+            addTestFragment(false, null, null, null, null, null, null, null)
         }
         //scroll listener
+        /*
         binding.rvMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -79,9 +78,20 @@ class ViewTestDetailsFragment : Fragment() {
                     !(newState == RecyclerView.SCROLL_STATE_DRAGGING || newState == RecyclerView.SCROLL_STATE_SETTLING)
             }
         })
+         */
         //recyclerview item click
         adapter.setOnMenuItemClickListener(object : TestScoresAdapter.SetOnMenuItemClick {
-            override fun onEdit(testDetails: TestDetails) {
+            override fun onEdit(testScore: TestScore) {
+                addTestFragment(
+                    true,
+                    testScore._id,
+                    testScore.testSeries,
+                    testScore.testName,
+                    Util.getLocalDate(testScore.testDate),
+                    testScore.scores.Physics,
+                    testScore.scores.Chemistry,
+                    testScore.scores.Mathematics
+                )
             }
 
             override fun onDelete(id: String) {
@@ -95,6 +105,35 @@ class ViewTestDetailsFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun addTestFragment(
+        update: Boolean,
+        id: String?,
+        testSeries: String?,
+        testName: String?,
+        takenOn: String?,
+        physicsScore: Int?,
+        chemistryScore: Int?,
+        mathScore: Int?
+    ) {
+        val transaction =
+            requireActivity().supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        transaction
+            .replace(
+                R.id.container,
+                AddTestDetailsFragment.newInstance(
+                    update,
+                    id,
+                    testSeries,
+                    testName,
+                    takenOn,
+                    physicsScore,
+                    chemistryScore,
+                    mathScore
+                )
+            ).commit()
     }
 
     private fun initViews() {

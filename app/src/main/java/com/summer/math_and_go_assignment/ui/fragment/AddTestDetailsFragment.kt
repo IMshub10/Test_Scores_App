@@ -1,22 +1,25 @@
 package com.summer.math_and_go_assignment.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.summer.math_and_go_assignment.R
-import com.summer.math_and_go_assignment.data.api.model.CreateTestDetail
+import com.summer.math_and_go_assignment.data.api.model.CreateOrUpdateTestScoreResponse
+import com.summer.math_and_go_assignment.data.api.model.CreateTestScore
 import com.summer.math_and_go_assignment.data.api.model.Scores
+import com.summer.math_and_go_assignment.data.api.model.UpdateTestScore
 import com.summer.math_and_go_assignment.data.local.LocalUserDataStorage
 import com.summer.math_and_go_assignment.databinding.AddScoresFragmentBinding
 import com.summer.math_and_go_assignment.ui.dialog.DatePickerDialog
 import com.summer.math_and_go_assignment.utils.Constants
+import com.summer.math_and_go_assignment.utils.Util
 import com.summer.math_and_go_assignment.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +35,8 @@ class AddTestDetailsFragment : Fragment() {
     private lateinit var binding: AddScoresFragmentBinding
     private lateinit var mainViewModel: MainViewModel
     private var testSeriesList = listOf<String>()
+    private var updateTestScore: Boolean = false
+    private lateinit var testScoreId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +53,14 @@ class AddTestDetailsFragment : Fragment() {
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
         initViewModel()
-        fillTestSeries()
+        ifUpdateInitViewData()
+        if (!updateTestScore) {
+            fillTestSeries()
+        } else {
+            binding.atvSelectTestSeries.isEnabled = false
+            binding.pgAddScores.isVisible = false
+            requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        }
         listeners()
     }
 
@@ -68,11 +80,10 @@ class AddTestDetailsFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
+                    Util.showShortToast(
                         requireContext(),
-                        "Internet is not available",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        "Internet is not available"
+                    )
                 }
             }
 
@@ -132,24 +143,10 @@ class AddTestDetailsFragment : Fragment() {
         binding.mbSaveTestScore.setOnClickListener {
             binding.pgAddScores.isVisible = true
             CoroutineScope(Dispatchers.IO).launch {
-                if (validateTestDetail()) {
-                    val createTestScoreResponse = mainViewModel.createTestScore(getTestDetail())
-                    if (!createTestScoreResponse.error) {
-                        requireActivity().supportFragmentManager.popBackStack()
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Could not add this test Score",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                if (!updateTestScore) {
+                    createTestScore()
                 } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), "Invalid Fields", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                    updateTestScore()
                 }
                 withContext(Dispatchers.Main) {
                     binding.pgAddScores.isVisible = false
@@ -160,6 +157,58 @@ class AddTestDetailsFragment : Fragment() {
         //EditText listener
         binding.etTakenOn.setOnClickListener {
             openDatePicker()
+        }
+    }
+
+    private suspend fun updateTestScore() {
+        val atLeastOneSubjectSelected =
+            binding.cbPhysics.isChecked || binding.cbChemistry.isChecked || binding.cbMath.isChecked
+        if (atLeastOneSubjectSelected && validateScores()) {
+            try {
+                val updateResponse =
+                    mainViewModel.updateTestScore(
+                        testScoreId,
+                        UpdateTestScore(getTestSubjectScores())
+                    )
+                createOrUpdateSuccess(updateResponse)
+            } catch (e: Exception) {
+                Log.e(TAG + "updateError", e.toString())
+            }
+        } else {
+            withContext(Dispatchers.Main) {
+                Util.showShortToast(
+                    requireContext(),
+                    "Invalid Fields"
+                )
+            }
+        }
+    }
+
+    private suspend fun createTestScore() {
+        if (validateTestDetail()) {
+            val createTestScoreResponse =
+                mainViewModel.createTestScore(getTestDetail())
+            createOrUpdateSuccess(createTestScoreResponse)
+        } else {
+            withContext(Dispatchers.Main) {
+                Util.showShortToast(
+                    requireContext(),
+                    "Invalid Fields"
+                )
+            }
+        }
+    }
+
+    private fun createOrUpdateSuccess(createOrUpdateTestScoreResponse: CreateOrUpdateTestScoreResponse) {
+        if (!createOrUpdateTestScoreResponse.error) {
+            requireActivity().supportFragmentManager.popBackStack()
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                Util.showShortToast(
+                    requireContext(),
+                    "Could not add this test score"
+                )
+            }
         }
     }
 
@@ -174,26 +223,38 @@ class AddTestDetailsFragment : Fragment() {
 
     private fun validateScores(): Boolean {
         if (binding.cbPhysics.isChecked) {
-            if (binding.etPhysicsYourScore.text.toString().trim().isEmpty()) {
+            if (binding.etPhysicsYourScore.text.toString().trim()
+                    .isEmpty()
+            ) {
+                return false
+            } else if (binding.etPhysicsYourScore.text.toString().trim().toInt() > 100) {
                 return false
             }
         }
         if (binding.cbChemistry.isChecked) {
-            if (binding.etChemistryYourScore.text.toString().trim().isEmpty()) {
+            if (binding.etChemistryYourScore.text.toString().trim()
+                    .isEmpty()
+            ) {
+                return false
+            } else if (binding.etChemistryYourScore.text.toString().trim().toInt() > 100) {
                 return false
             }
         }
         if (binding.cbMath.isChecked) {
-            if (binding.etMathYourScore.text.toString().trim().isEmpty()) {
+            if (binding.etMathYourScore.text.toString().trim()
+                    .isEmpty()
+            ) {
+                return false
+            } else if (binding.etMathYourScore.text.toString().trim().toInt() > 100) {
                 return false
             }
         }
         return true
     }
 
-    private fun getTestDetail(): CreateTestDetail {
+    private fun getTestDetail(): CreateTestScore {
         val subjectScores: Scores = getTestSubjectScores()
-        return CreateTestDetail(
+        return CreateTestScore(
             LocalUserDataStorage.loadUserData(requireContext()).email!!,
             binding.atvSelectTestSeries.text.toString(),
             binding.etTestName.text!!.trim().toString(),
@@ -228,9 +289,77 @@ class AddTestDetailsFragment : Fragment() {
         mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
+    private fun ifUpdateInitViewData() {
+        arguments?.let {
+            updateTestScore = it.getBoolean("update")
+            if (updateTestScore) {
+                testScoreId = it.getString("id")!!
+                binding.atvSelectTestSeries.setText(it.getString("testSeries")!!)
+                binding.etTestName.setText(it.getString("testName")!!)
+                binding.etTakenOn.setText(it.getString("takenOn")!!)
+                if (it.getString("physicsScore") != null) {
+                    binding.cbPhysics.isChecked = true
+                    binding.cbPhysics.isEnabled = false
+                    binding.cbPhysics.alpha = 1.0f
+                    binding.etPhysicsYourScore.setText(it.getString("physicsScore"))
+                    binding.etPhysicsYourScore.isEnabled = true
+                }
+                if (it.getString("chemistryScore") != null) {
+                    binding.cbChemistry.isChecked = true
+                    binding.cbChemistry.isEnabled = false
+                    binding.cbChemistry.alpha = 1.0f
+                    binding.etChemistryYourScore.setText(it.getString("chemistryScore"))
+                    binding.etChemistryYourScore.isEnabled = true
+                }
+                if (it.getString("mathScore") != null) {
+                    binding.cbMath.isChecked = true
+                    binding.cbMath.alpha = 1.0f
+                    binding.cbMath.isEnabled = false
+                    binding.etMathYourScore.setText(it.getString("mathScore"))
+                    binding.etMathYourScore.isEnabled = true
+                }
+                binding.atvSelectTestSeries.isEnabled = false
+                binding.etTestName.isEnabled = false
+                binding.etTakenOn.isEnabled = false
+            }
+        }
+    }
+
     companion object {
         @JvmStatic
-        fun newInstance() =
-            AddTestDetailsFragment()
+        fun newInstance(
+            update: Boolean,
+            id: String?,
+            testSeries: String?,
+            testName: String?,
+            takenOn: String?,
+            physicsScore: Int?,
+            chemistryScore: Int?,
+            mathScore: Int?
+        ) =
+            AddTestDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean("update", update)
+                    putString("id", id)
+                    putString("testSeries", testSeries)
+                    putString("testName", testName)
+                    putString("takenOn", takenOn)
+                    if (physicsScore != null) {
+                        putString("physicsScore", physicsScore.toString())
+                    } else {
+                        putString("physicsScore", null)
+                    }
+                    if (chemistryScore != null) {
+                        putString("chemistryScore", chemistryScore.toString())
+                    } else {
+                        putString("chemistryScore", null)
+                    }
+                    if (mathScore != null) {
+                        putString("mathScore", mathScore.toString())
+                    } else {
+                        putString("mathScore", null)
+                    }
+                }
+            }
     }
 }

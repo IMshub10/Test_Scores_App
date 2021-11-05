@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.summer.math_and_go_assignment.R
 import com.summer.math_and_go_assignment.data.api.model.DisplayItem
-import com.summer.math_and_go_assignment.data.api.model.TestDetails
+import com.summer.math_and_go_assignment.data.api.model.TestScore
 import com.summer.math_and_go_assignment.databinding.ItemTestScoreBinding
 import com.summer.math_and_go_assignment.utils.Constants
-import java.time.LocalDate
+import com.summer.math_and_go_assignment.utils.Util
 
 class TestScoresAdapter(private val context: Context) :
-    PagingDataAdapter<TestDetails, TestScoresAdapter.TestScoreHolder>(
+    PagingDataAdapter<TestScore, TestScoresAdapter.TestScoreHolder>(
         DIFF_CALLBACK
     ) {
     private val TAG = "TestScoresAdapter"
@@ -30,9 +30,9 @@ class TestScoresAdapter(private val context: Context) :
 
     inner class TestScoreHolder(private val binding: ItemTestScoreBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(testDetails: TestDetails) {
+        fun bind(testScore: TestScore) {
             //date conversion
-            val displayItem = displayDetails(testDetails, layoutPosition)
+            val displayItem = displayDetails(testScore, layoutPosition)
             //bind details
             binding.apply {
                 tvTestName.text = displayItem.testName
@@ -44,38 +44,35 @@ class TestScoresAdapter(private val context: Context) :
                 tvTotalScore.text = displayItem.totalScore
             }
             binding.ivMenuUpdateDelete.setOnClickListener {
-                popupMenus(it, testDetails)
+                popupMenus(it, testScore)
             }
         }
     }
 
-    private fun displayDetails(testDetails: TestDetails, position: Int): DisplayItem {
-        val localDate =
-            LocalDate.parse(testDetails.testDate, Constants.API_PROVIDING_DATE_FORMAT)
-        val displayDate = Constants.DATE_DISPLAY_FORMAT.format(localDate)
+    private fun displayDetails(testScore: TestScore, position: Int): DisplayItem {
         //scores text
         val physicsScoreText: String
         val chemistryScoreText: String
         val mathScoreText: String
         var totalFullScore = 0
         var totalYourScore = 0
-        if (testDetails.scores.Physics != null) {
-            physicsScoreText = "${testDetails.scores.Physics}/${Constants.TOTAL_SCORE}"
-            totalYourScore += testDetails.scores.Physics!!
+        if (testScore.scores.Physics != null) {
+            physicsScoreText = "${testScore.scores.Physics}/${Constants.TOTAL_SCORE}"
+            totalYourScore += testScore.scores.Physics!!
             totalFullScore += Constants.TOTAL_SCORE
         } else {
             physicsScoreText = "N.A"
         }
-        if (testDetails.scores.Chemistry != null) {
-            chemistryScoreText = "${testDetails.scores.Chemistry}/${Constants.TOTAL_SCORE}"
-            totalYourScore += testDetails.scores.Chemistry!!
+        if (testScore.scores.Chemistry != null) {
+            chemistryScoreText = "${testScore.scores.Chemistry}/${Constants.TOTAL_SCORE}"
+            totalYourScore += testScore.scores.Chemistry!!
             totalFullScore += Constants.TOTAL_SCORE
         } else {
             chemistryScoreText = "N.A"
         }
-        if (testDetails.scores.Mathematics != null) {
-            mathScoreText = "${testDetails.scores.Mathematics}/${Constants.TOTAL_SCORE}"
-            totalYourScore += testDetails.scores.Mathematics!!
+        if (testScore.scores.Mathematics != null) {
+            mathScoreText = "${testScore.scores.Mathematics}/${Constants.TOTAL_SCORE}"
+            totalYourScore += testScore.scores.Mathematics!!
             totalFullScore += Constants.TOTAL_SCORE
         } else {
             mathScoreText = "N.A"
@@ -84,11 +81,11 @@ class TestScoresAdapter(private val context: Context) :
         val totalScoreText =
             "$totalYourScore/$totalFullScore"
 
-        val testName = "${itemCount - position}. ${testDetails.testName}"
+        val testName = "${itemCount - position}. ${testScore.testName}"
         return DisplayItem(
             testName,
-            displayDate,
-            testDetails.testSeries,
+            Util.getLocalDate(testScore.testDate),
+            testScore.testSeries,
             physicsScoreText,
             chemistryScoreText,
             mathScoreText,
@@ -97,18 +94,18 @@ class TestScoresAdapter(private val context: Context) :
     }
 
     companion object {
-        private val DIFF_CALLBACK: DiffUtil.ItemCallback<TestDetails> =
-            object : DiffUtil.ItemCallback<TestDetails>() {
+        private val DIFF_CALLBACK: DiffUtil.ItemCallback<TestScore> =
+            object : DiffUtil.ItemCallback<TestScore>() {
                 override fun areItemsTheSame(
-                    oldItem: TestDetails,
-                    newItem: TestDetails
+                    oldItem: TestScore,
+                    newItem: TestScore
                 ): Boolean {
                     return oldItem._id == newItem._id
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: TestDetails,
-                    newItem: TestDetails
+                    oldItem: TestScore,
+                    newItem: TestScore
                 ): Boolean {
                     return oldItem.scores == newItem.scores
                             && oldItem.email == newItem.email
@@ -123,7 +120,7 @@ class TestScoresAdapter(private val context: Context) :
     }
 
     override fun onBindViewHolder(holder: TestScoreHolder, position: Int) {
-        holder.bind(testDetails = getItem(position)!!)
+        holder.bind(testScore = getItem(position)!!)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestScoreHolder {
@@ -132,19 +129,19 @@ class TestScoresAdapter(private val context: Context) :
         )
     }
 
-    private fun popupMenus(view: View, testDetails: TestDetails) {
+    private fun popupMenus(view: View, testScore: TestScore) {
         val popupMenus = PopupMenu(context, view)
         popupMenus.inflate(R.menu.test_score_item_icons)
         popupMenus.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.edit -> {
                     Log.e(TAG, "Edit")
-                    setOnMenuItemClick.onEdit(testDetails = testDetails)
+                    setOnMenuItemClick.onEdit(testScore = testScore)
                     true
                 }
                 R.id.delete -> {
                     Log.e(TAG, "Delete")
-                    setOnMenuItemClick.onDelete(id = testDetails._id)
+                    setOnMenuItemClick.onDelete(id = testScore._id)
                     true
                 }
                 else -> {
@@ -156,7 +153,7 @@ class TestScoresAdapter(private val context: Context) :
     }
 
     interface SetOnMenuItemClick {
-        fun onEdit(testDetails: TestDetails)
+        fun onEdit(testScore: TestScore)
         fun onDelete(id: String)
     }
 }

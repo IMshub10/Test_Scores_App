@@ -4,16 +4,20 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.liveData
 import com.summer.math_and_go_assignment.data.api.apiservice.TestDetailsApi
-import com.summer.math_and_go_assignment.data.api.model.CreateTestDetail
+import com.summer.math_and_go_assignment.data.api.model.CreateTestScore
 import com.summer.math_and_go_assignment.data.api.model.GetTestSeriesResponse
+import com.summer.math_and_go_assignment.data.api.model.Scores
+import com.summer.math_and_go_assignment.data.api.model.UpdateTestScore
 import javax.inject.Inject
 
 class TestScoresRepository @Inject constructor(private val testDetailsApi: TestDetailsApi) {
     suspend fun getTestSeries(): GetTestSeriesResponse? = testDetailsApi.getTestSeries()
 
+    suspend fun updateTestScore(id: String, updateTestScore: UpdateTestScore) =
+        testDetailsApi.updateTestScore(id, updateTestScore)
 
-    suspend fun createTestScore(createTestDetail: CreateTestDetail) =
-        testDetailsApi.createTestScore(createTestDetail)
+    suspend fun createTestScore(createTestScore: CreateTestScore) =
+        testDetailsApi.createTestScore(createTestScore)
 
     suspend fun deleteTestScoreWithId(id: String) =
         testDetailsApi.deleteTestScoreWithId(id)

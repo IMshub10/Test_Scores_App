@@ -10,6 +10,11 @@ data class GetTestSeriesResponse(
     var testSeries: List<String>
 )
 
+data class UpdateTestScore(
+    @Json(name = "scores")
+    var scores: Scores
+)
+
 data class Scores(
     @Json(name = "Physics")
     var Physics: Int?,
@@ -21,7 +26,7 @@ data class Scores(
     var Mathematics: Int?
 )
 
-data class GetTestDetailsResponse(
+data class GetTestScoresResponse(
     @Json(name = "error")
     var error: Boolean,
 
@@ -38,10 +43,10 @@ data class GetTestDetailsResponse(
     var limit: Int,
 
     @Json(name = "testScores")
-    var testScores: List<TestDetails>
+    var testScores: List<TestScore>
 )
 
-data class TestDetails(
+data class TestScore(
     @Json(name = "scores")
     var scores: Scores,
 
@@ -73,7 +78,7 @@ data class TestDetails(
     var __v: Int
 )
 
-data class CreateTestDetail(
+data class CreateTestScore(
     @Json(name = "email")
     val email: String,
 
@@ -93,10 +98,10 @@ data class CreateTestDetail(
     val scores: Scores
 )
 
-data class CreateTestDetailResponse(
+data class CreateOrUpdateTestScoreResponse(
     @Json(name = "error")
     val error: Boolean,
 
     @Json(name = "testScore")
-    val testScore: TestDetails
+    val testScore: TestScore
 )
