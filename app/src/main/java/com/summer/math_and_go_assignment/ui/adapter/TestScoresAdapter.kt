@@ -1,73 +1,99 @@
 package com.summer.math_and_go_assignment.ui.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.summer.math_and_go_assignment.R
+import com.summer.math_and_go_assignment.data.api.model.DisplayItem
 import com.summer.math_and_go_assignment.data.api.model.TestDetails
 import com.summer.math_and_go_assignment.databinding.ItemTestScoreBinding
 import com.summer.math_and_go_assignment.utils.Constants
 import java.time.LocalDate
 
-class TestScoresAdapter : PagingDataAdapter<TestDetails, TestScoresAdapter.TestScoreHolder>(
-    DIFF_CALLBACK
-) {
+class TestScoresAdapter(private val context: Context) :
+    PagingDataAdapter<TestDetails, TestScoresAdapter.TestScoreHolder>(
+        DIFF_CALLBACK
+    ) {
     private val TAG = "TestScoresAdapter"
+
+    private lateinit var setOnMenuItemClick: SetOnMenuItemClick
+
+    fun setOnMenuItemClickListener(setOnMenuItemClick: SetOnMenuItemClick) {
+        this.setOnMenuItemClick = setOnMenuItemClick
+    }
 
     inner class TestScoreHolder(private val binding: ItemTestScoreBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(testDetails: TestDetails) {
             //date conversion
-
-            val localDate =
-                LocalDate.parse(testDetails.testDate, Constants.API_PROVIDING_DATE_FORMAT)
-            val displayDate = Constants.DATE_DISPLAY_FORMAT.format(localDate)
-            //scores text
-            val physicsScoreText: String
-            val chemistryScoreText: String
-            val mathScoreText: String
-            var totalFullScore = 0
-            var totalYourScore = 0
-            if (testDetails.scores.Physics != null) {
-                physicsScoreText = "${testDetails.scores.Physics}/${Constants.TOTAL_SCORE}"
-                totalYourScore += testDetails.scores.Physics!!
-                totalFullScore += Constants.TOTAL_SCORE
-            } else {
-                physicsScoreText = "N.A"
-            }
-            if (testDetails.scores.Chemistry != null) {
-                chemistryScoreText = "${testDetails.scores.Chemistry}/${Constants.TOTAL_SCORE}"
-                totalYourScore += testDetails.scores.Chemistry!!
-                totalFullScore += Constants.TOTAL_SCORE
-            } else {
-                chemistryScoreText = "N.A"
-            }
-            if (testDetails.scores.Mathematics != null) {
-                mathScoreText = "${testDetails.scores.Mathematics}/${Constants.TOTAL_SCORE}"
-                totalYourScore += testDetails.scores.Mathematics!!
-                totalFullScore += Constants.TOTAL_SCORE
-            } else {
-                mathScoreText = "N.A"
-            }
-
-            val totalScoreText =
-                "$totalYourScore/$totalFullScore"
-
-            val testName = "${layoutPosition + 1}. ${testDetails.testName}"
+            val displayItem = displayDetails(testDetails, layoutPosition)
             //bind details
             binding.apply {
-                tvTestName.text = testName
-                tvDate.text = displayDate
-                tvTestSeries.text = testDetails.testSeries
-                tvTestSeries.text = testDetails.testSeries
-                tvPhysicsScore.text = physicsScoreText
-                tvChemistryScore.text = chemistryScoreText
-                tvMathScore.text = mathScoreText
-                tvTotalScore.text = totalScoreText
+                tvTestName.text = displayItem.testName
+                tvDate.text = displayItem.testDate
+                tvTestSeries.text = displayItem.testSeries
+                tvPhysicsScore.text = displayItem.physicsScore
+                tvChemistryScore.text = displayItem.chemistryScore
+                tvMathScore.text = displayItem.mathScore
+                tvTotalScore.text = displayItem.totalScore
+            }
+            binding.ivMenuUpdateDelete.setOnClickListener {
+                popupMenus(it, testDetails)
             }
         }
+    }
+
+    private fun displayDetails(testDetails: TestDetails, position: Int): DisplayItem {
+        val localDate =
+            LocalDate.parse(testDetails.testDate, Constants.API_PROVIDING_DATE_FORMAT)
+        val displayDate = Constants.DATE_DISPLAY_FORMAT.format(localDate)
+        //scores text
+        val physicsScoreText: String
+        val chemistryScoreText: String
+        val mathScoreText: String
+        var totalFullScore = 0
+        var totalYourScore = 0
+        if (testDetails.scores.Physics != null) {
+            physicsScoreText = "${testDetails.scores.Physics}/${Constants.TOTAL_SCORE}"
+            totalYourScore += testDetails.scores.Physics!!
+            totalFullScore += Constants.TOTAL_SCORE
+        } else {
+            physicsScoreText = "N.A"
+        }
+        if (testDetails.scores.Chemistry != null) {
+            chemistryScoreText = "${testDetails.scores.Chemistry}/${Constants.TOTAL_SCORE}"
+            totalYourScore += testDetails.scores.Chemistry!!
+            totalFullScore += Constants.TOTAL_SCORE
+        } else {
+            chemistryScoreText = "N.A"
+        }
+        if (testDetails.scores.Mathematics != null) {
+            mathScoreText = "${testDetails.scores.Mathematics}/${Constants.TOTAL_SCORE}"
+            totalYourScore += testDetails.scores.Mathematics!!
+            totalFullScore += Constants.TOTAL_SCORE
+        } else {
+            mathScoreText = "N.A"
+        }
+
+        val totalScoreText =
+            "$totalYourScore/$totalFullScore"
+
+        val testName = "${itemCount - position}. ${testDetails.testName}"
+        return DisplayItem(
+            testName,
+            displayDate,
+            testDetails.testSeries,
+            physicsScoreText,
+            chemistryScoreText,
+            mathScoreText,
+            totalScoreText
+        )
     }
 
     companion object {
@@ -98,12 +124,39 @@ class TestScoresAdapter : PagingDataAdapter<TestDetails, TestScoresAdapter.TestS
 
     override fun onBindViewHolder(holder: TestScoreHolder, position: Int) {
         holder.bind(testDetails = getItem(position)!!)
-        Log.e(TAG, getItem(position).toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestScoreHolder {
         return TestScoreHolder(
             ItemTestScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
+    }
+
+    private fun popupMenus(view: View, testDetails: TestDetails) {
+        val popupMenus = PopupMenu(context, view)
+        popupMenus.inflate(R.menu.test_score_item_icons)
+        popupMenus.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.edit -> {
+                    Log.e(TAG, "Edit")
+                    setOnMenuItemClick.onEdit(testDetails = testDetails)
+                    true
+                }
+                R.id.delete -> {
+                    Log.e(TAG, "Delete")
+                    setOnMenuItemClick.onDelete(id = testDetails._id)
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+        }
+        popupMenus.show()
+    }
+
+    interface SetOnMenuItemClick {
+        fun onEdit(testDetails: TestDetails)
+        fun onDelete(id: String)
     }
 }

@@ -30,6 +30,7 @@
         <item name="colorSeparator">@color/separator_light</item>
         <item name="iconColorPrimary">@color/blue_light</item>
         <item name="iconColorSecondary">?attr/labelSecondary</item>
+        <item name="android:windowLightStatusBar">true</item>
 
     </style>
 

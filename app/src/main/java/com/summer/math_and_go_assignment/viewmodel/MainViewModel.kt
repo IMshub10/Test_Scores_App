@@ -17,6 +17,9 @@ public class MainViewModel @Inject constructor(private val testScoresRepository:
     suspend fun createTestScore(createTestDetail: CreateTestDetail) =
         testScoresRepository.createTestScore(createTestDetail)
 
+    suspend fun deleteTestScore(id: String) =
+        testScoresRepository.deleteTestScoreWithId(id)
+
     fun testScoresList(email: String) =
         testScoresRepository.getTestScoresPaging(email)
 }

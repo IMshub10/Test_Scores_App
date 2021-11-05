@@ -5,10 +5,7 @@ import com.summer.math_and_go_assignment.data.api.model.CreateTestDetail
 import com.summer.math_and_go_assignment.data.api.model.CreateTestDetailResponse
 import com.summer.math_and_go_assignment.data.api.model.GetTestDetailsResponse
 import com.summer.math_and_go_assignment.data.api.model.GetTestSeriesResponse
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface TestDetailsApi {
     @GET("test-series")
@@ -27,4 +24,8 @@ interface TestDetailsApi {
     suspend fun createTestScore(
         @Body createTestDetail: CreateTestDetail
     ): CreateTestDetailResponse
+
+    @DELETE("test-scores/{id}")
+    suspend fun deleteTestScoreWithId(@Path("id") id: String)
+
 }

@@ -11,11 +11,12 @@ import javax.inject.Inject
 class TestScoresRepository @Inject constructor(private val testDetailsApi: TestDetailsApi) {
     suspend fun getTestSeries(): GetTestSeriesResponse? = testDetailsApi.getTestSeries()
 
-    suspend fun getTestScores(email: String, page: Int, limit: Int) =
-        testDetailsApi.getTestScores(email, page, limit)
 
     suspend fun createTestScore(createTestDetail: CreateTestDetail) =
         testDetailsApi.createTestScore(createTestDetail)
+
+    suspend fun deleteTestScoreWithId(id: String) =
+        testDetailsApi.deleteTestScoreWithId(id)
 
     fun getTestScoresPaging(email: String) =
         Pager(
