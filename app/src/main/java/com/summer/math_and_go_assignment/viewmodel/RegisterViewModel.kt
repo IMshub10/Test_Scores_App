@@ -1,8 +1,6 @@
 package com.summer.math_and_go_assignment.viewmodel
 
 import android.util.Patterns
-import androidx.databinding.Bindable
-import androidx.databinding.Observable
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

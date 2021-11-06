@@ -6,7 +6,6 @@ import androidx.paging.liveData
 import com.summer.math_and_go_assignment.data.api.apiservice.TestDetailsApi
 import com.summer.math_and_go_assignment.data.api.model.CreateTestScore
 import com.summer.math_and_go_assignment.data.api.model.GetTestSeriesResponse
-import com.summer.math_and_go_assignment.data.api.model.Scores
 import com.summer.math_and_go_assignment.data.api.model.UpdateTestScore
 import javax.inject.Inject
 

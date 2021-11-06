@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.summer.math_and_go_assignment.R
 import com.summer.math_and_go_assignment.data.local.LocalUserDataStorage
 import com.summer.math_and_go_assignment.databinding.ActivitySplashScreenBinding
 import kotlinx.coroutines.CoroutineScope

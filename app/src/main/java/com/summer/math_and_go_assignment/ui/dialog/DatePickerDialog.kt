@@ -1,7 +1,6 @@
 package com.summer.math_and_go_assignment.ui.dialog
 
 import android.app.Dialog
-import android.content.res.Configuration
 import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.util.Log

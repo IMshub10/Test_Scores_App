@@ -1,6 +1,5 @@
 package com.summer.math_and_go_assignment.data.api.apiservice
 
-
 import com.summer.math_and_go_assignment.data.api.model.*
 import retrofit2.http.*
 
