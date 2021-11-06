@@ -1,6 +1,7 @@
 package com.summer.math_and_go_assignment.ui.dialog
 
 import android.app.Dialog
+import android.content.res.Configuration
 import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +11,13 @@ import android.widget.Button
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import com.summer.math_and_go_assignment.R
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DatePickerDialog : DialogFragment() {
 
+    private val TAG = "DatePickerDialog"
     private var selectedDay: Int = Calendar.getInstance()[Calendar.DATE]
     private var selectedMonth: Int = Calendar.getInstance()[Calendar.MONTH]
     private var selectedYear: Int = Calendar.getInstance()[Calendar.YEAR]
@@ -37,10 +40,11 @@ class DatePickerDialog : DialogFragment() {
                 .build()
 
             val date = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.time)
-
-            Log.e("Inside DatePickerDialog", date)
-
-            listener.onDateSelected(date)
+            try {
+                listener.onDateSelected(date)
+            } catch (e: Exception) {
+                Log.e(TAG, e.toString())
+            }
             dismiss()
         }
 
