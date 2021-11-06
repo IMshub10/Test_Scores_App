@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -15,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.summer.math_and_go_assignment.R
 import com.summer.math_and_go_assignment.data.api.model.TestScore
 import com.summer.math_and_go_assignment.data.local.LocalUserDataStorage
-import com.summer.math_and_go_assignment.databinding.MainFragmentBinding
+import com.summer.math_and_go_assignment.databinding.ViewTestFragmentBinding
 import com.summer.math_and_go_assignment.ui.adapter.TestScoresAdapter
 import com.summer.math_and_go_assignment.utils.Util
-import com.summer.math_and_go_assignment.viewmodel.MainViewModel
+import com.summer.math_and_go_assignment.viewmodel.ViewTestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,8 +30,8 @@ import java.lang.Exception
 @AndroidEntryPoint
 class ViewTestDetailsFragment : Fragment() {
     private val TAG = "ViewTestDetailsFragment"
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var binding: MainFragmentBinding
+    private val viewTestViewModel: ViewTestViewModel by viewModels()
+    private lateinit var binding: ViewTestFragmentBinding
     private lateinit var adapter: TestScoresAdapter
 
     companion object {
@@ -41,15 +42,19 @@ class ViewTestDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainFragmentBinding.inflate(layoutInflater)
+        binding = ViewTestFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
         initViews()
-        mainViewModel.testScoresList(LocalUserDataStorage.loadUserData(requireContext()).email!!)
+        setUpDataObservers()
+        listeners()
+    }
+
+    private fun setUpDataObservers() {
+        viewTestViewModel.testScoresList(LocalUserDataStorage.loadUserData(requireContext()).email!!)
             .observe(viewLifecycleOwner, {
                 adapter.submitData(viewLifecycleOwner.lifecycle, it)
             })
@@ -60,7 +65,6 @@ class ViewTestDetailsFragment : Fragment() {
                 binding.tvError.isVisible = loadStates.refresh is LoadState.Error
             }
         }
-        listeners()
     }
 
 
@@ -68,16 +72,9 @@ class ViewTestDetailsFragment : Fragment() {
         binding.mbAddTestDetail.setOnClickListener {
             addTestFragment(false, null, null, null, null, null, null, null)
         }
-        //scroll listener
-        /*
-        binding.rvMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                binding.mbAddTestDetail.isVisible =
-                    !(newState == RecyclerView.SCROLL_STATE_DRAGGING || newState == RecyclerView.SCROLL_STATE_SETTLING)
-            }
-        })
-         */
+        binding.tvRetryTestDetail.setOnClickListener {
+            adapter.retry()
+        }
         //recyclerview item click
         adapter.setOnMenuItemClickListener(object : TestScoresAdapter.SetOnMenuItemClick {
             override fun onEdit(testScore: TestScore) {
@@ -96,7 +93,7 @@ class ViewTestDetailsFragment : Fragment() {
             override fun onDelete(id: String) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        mainViewModel.deleteTestScore(id)
+                        viewTestViewModel.deleteTestScore(id)
                         adapter.refresh()
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
@@ -104,6 +101,7 @@ class ViewTestDetailsFragment : Fragment() {
                 }
             }
         })
+
     }
 
     //Switch to AddTestDetailsFragment
@@ -144,9 +142,4 @@ class ViewTestDetailsFragment : Fragment() {
                 LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         }
     }
-
-    private fun initViewModel() {
-        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-    }
-
 }

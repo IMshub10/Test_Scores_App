@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val testScoresRepository: TestScoresRepository) :
+class ViewTestViewModel @Inject constructor(private val testScoresRepository: TestScoresRepository) :
     ViewModel() {
     suspend fun deleteTestScore(id: String) =
         testScoresRepository.deleteTestScoreWithId(id)
