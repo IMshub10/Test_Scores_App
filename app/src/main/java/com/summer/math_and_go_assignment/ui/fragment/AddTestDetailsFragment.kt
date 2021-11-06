@@ -107,6 +107,7 @@ class AddTestDetailsFragment : Fragment() {
     private fun listeners() {
         //checkbox listeners
         binding.cbPhysics.setOnCheckedChangeListener { _, isChecked ->
+            Log.e(TAG, "Physics called $isChecked")
             addTestViewModel.cbPhysicsIsChecked.value = isChecked
             if (isChecked) {
                 binding.cbPhysics.alpha = 1.0f
@@ -118,6 +119,7 @@ class AddTestDetailsFragment : Fragment() {
         }
         binding.cbChemistry.setOnCheckedChangeListener { _, isChecked ->
             addTestViewModel.cbChemistryIsChecked.value = isChecked
+            Log.e(TAG, "Chem called $isChecked")
             if (isChecked) {
                 binding.cbChemistry.alpha = 1.0f
                 binding.etChemistryYourScore.isEnabled = true
@@ -127,6 +129,7 @@ class AddTestDetailsFragment : Fragment() {
             }
         }
         binding.cbMath.setOnCheckedChangeListener { _, isChecked ->
+            Log.e(TAG, "Math called $isChecked")
             addTestViewModel.cbMathIsChecked.value = isChecked
             if (isChecked) {
                 binding.cbMath.alpha = 1.0f
@@ -158,21 +161,27 @@ class AddTestDetailsFragment : Fragment() {
                 addTestViewModel.testName.value = it.getString("testName")!!
                 addTestViewModel.dateTakenOn.value = it.getString("takenOn")!!
                 if (it.getString("physicsScore") != null) {
+                    Log.e(TAG, it.getString("physicsScore")!!)
                     binding.cbPhysics.isChecked = true
+                    addTestViewModel.cbPhysicsIsChecked.value = true
                     binding.cbPhysics.isEnabled = false
                     binding.cbPhysics.alpha = 1.0f
                     addTestViewModel.yourPhysicsScore.value = it.getString("physicsScore")
                     binding.etPhysicsYourScore.isEnabled = true
                 }
                 if (it.getString("chemistryScore") != null) {
+                    Log.e(TAG, it.getString("chemistryScore")!!)
                     binding.cbChemistry.isChecked = true
+                    addTestViewModel.cbChemistryIsChecked.value = true
                     binding.cbChemistry.isEnabled = false
                     binding.cbChemistry.alpha = 1.0f
                     addTestViewModel.yourChemistryScore.value = it.getString("chemistryScore")
                     binding.etChemistryYourScore.isEnabled = true
                 }
                 if (it.getString("mathScore") != null) {
+                    Log.e(TAG, it.getString("mathScore")!!)
                     binding.cbMath.isChecked = true
+                    addTestViewModel.cbMathIsChecked.value = true
                     binding.cbMath.alpha = 1.0f
                     binding.cbMath.isEnabled = false
                     addTestViewModel.yourMathScore.value = it.getString("mathScore")

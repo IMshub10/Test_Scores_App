@@ -112,6 +112,10 @@ class AddTestViewModel @Inject constructor(
     private suspend fun updateTestScore() {
         val atLeastOneSubjectSelected =
             cbPhysicsIsChecked.value!! || cbChemistryIsChecked.value!! || cbMathIsChecked.value!!
+
+        Log.e(TAG+"physics",cbPhysicsIsChecked.value.toString())
+        Log.e(TAG+"chem",cbChemistryIsChecked.value.toString())
+        Log.e(TAG+"math",cbMathIsChecked.value.toString())
         if (atLeastOneSubjectSelected && validateScores()) {
             try {
                 val updateResponse =
